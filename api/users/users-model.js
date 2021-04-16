@@ -18,9 +18,12 @@ function find() {
       }
     ]
    */
+  return db("users")
+  .join('roles', 'users.role_id', '=', 'roles.role_id')
+  .select('users.user_id', 'users.username', 'roles.role_name')
 }
 
-function findBy(filter) {
+async function findBy(filter) {
   /**
     You will need to join two tables.
     Resolves to an ARRAY with all users that match the filter condition.
@@ -34,6 +37,9 @@ function findBy(filter) {
       }
     ]
    */
+    let res = await db.select('users.user_id', 'users.username', 'roles.role_name', 'users.password').from("users")
+    .join('roles', 'users.role_id', '=', 'roles.role_id')
+    return res.filter(filter)
 }
 
 function findById(user_id) {
@@ -47,6 +53,11 @@ function findById(user_id) {
       "role_name": "instructor"
     }
    */
+    return db("users")
+    .join('roles', 'users.role_id', '=', 'roles.role_id')
+    .select('users.user_id', 'users.username', 'roles.role_name')
+    .where('users.user_id', '=', user_id)
+    .first()
 }
 
 /**
